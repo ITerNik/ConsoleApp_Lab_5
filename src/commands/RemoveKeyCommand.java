@@ -2,6 +2,7 @@ package commands;
 
 import logic.IODevice;
 import logic.Manager;
+import resources.Messages;
 
 public class RemoveKeyCommand extends AbstractCommand {
     public RemoveKeyCommand(IODevice io, Manager manager) {
@@ -12,7 +13,7 @@ public class RemoveKeyCommand extends AbstractCommand {
     @Override
     protected void checkArguments(String[] param) throws IllegalArgumentException {
         if (!manager.containsKey(param[0]))
-            throw new IllegalArgumentException("Элемента с ключом " + param[0] + " не существует");
+            throw new IllegalArgumentException(Messages.getMessage("warning.format.non_existing_element", param[0]));
     }
 
     @Override
@@ -27,11 +28,11 @@ public class RemoveKeyCommand extends AbstractCommand {
 
     @Override
     public String getReport() {
-        return "Элемент " + parameters[0] + " успешно удален";
+        return Messages.getMessage("message.format.success_delete", parameters[0]);
     }
 
     @Override
     public String getInfo() {
-        return "удаляет элемент из коллекции по его ключу";
+        return Messages.getMessage("command.remove_key");
     }
 }

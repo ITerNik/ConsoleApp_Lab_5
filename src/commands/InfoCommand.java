@@ -2,6 +2,7 @@ package commands;
 
 import logic.IODevice;
 import logic.Manager;
+import resources.Messages;
 
 public class InfoCommand extends AbstractCommand {
     private String report;
@@ -27,6 +28,6 @@ public class InfoCommand extends AbstractCommand {
 
     @Override
     public String getInfo() {
-        return  "выводит в стандартный поток вывода информацию о коллекции (тип, дата инициализации, количество элементов и т.д.)";
+        return Messages.getMessage("command.info");
     }
 }

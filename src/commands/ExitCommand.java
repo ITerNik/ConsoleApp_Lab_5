@@ -1,7 +1,6 @@
 package commands;
 
-import exceptions.NonUniqueIdException;
-import logic.Service;
+import resources.Messages;
 
 import java.util.NoSuchElementException;
 
@@ -19,11 +18,11 @@ public class ExitCommand extends AbstractCommand {
 
     @Override
     public String getReport() {
-        return "Заглядывайте еще!";
+        return Messages.getMessage("message.goodbye");
     }
 
     @Override
     public String getInfo() {
-        return "завершает программу (без сохранения в файл)";
+        return Messages.getMessage("command.exit");
     }
 }

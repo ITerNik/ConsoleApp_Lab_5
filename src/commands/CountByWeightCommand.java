@@ -2,6 +2,7 @@ package commands;
 
 import logic.IODevice;
 import logic.Manager;
+import resources.Messages;
 
 public class CountByWeightCommand extends AbstractCommand {
     private double weight;
@@ -17,7 +18,7 @@ public class CountByWeightCommand extends AbstractCommand {
         try {
             weight = Double.parseDouble(param[0]);
         } catch (NumberFormatException e) {
-            throw new IllegalArgumentException("Вес должен быть числом");
+            throw new IllegalArgumentException(Messages.getMessage("warning.format.not_real", Messages.getMessage("parameter.weight")));
         }
     }
 
@@ -33,11 +34,11 @@ public class CountByWeightCommand extends AbstractCommand {
 
     @Override
     public String getReport() {
-        return String.format("В коллекции найдено %s элементов с весом %s", count, weight);
+        return Messages.getMessage("message.format.count", count);
     }
 
     @Override
     public String getInfo() {
-        return "выводит количество элементов, значение поля weight которых равно заданному";
+        return Messages.getMessage("command.count_by_weight");
     }
 }

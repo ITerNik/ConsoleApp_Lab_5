@@ -2,13 +2,14 @@ package commands;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import logic.IODevice;
-import logic.Manager;
 import logic.JsonHandler;
+import logic.Manager;
+import resources.Messages;
 
 import java.io.IOException;
 
 public class SaveCommand extends AbstractCommand {
-    private JsonHandler handler;
+    private final JsonHandler handler;
 
     public SaveCommand(IODevice io, Manager manager, JsonHandler handler) {
         super(io, manager);
@@ -23,7 +24,7 @@ public class SaveCommand extends AbstractCommand {
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         } catch (IOException e) {
-            io.write("Возникли проблемы при записи в файл");
+            io.write("warning.write_error");
         }
     }
 
@@ -34,11 +35,11 @@ public class SaveCommand extends AbstractCommand {
 
     @Override
     public String getReport() {
-        return "Коллекция успешно записана";
+        return Messages.getMessage("message.saved");
     }
 
     @Override
     public String getInfo() {
-        return "сохраняет коллекцию в файл";
+        return Messages.getMessage("command.save");
     }
 }

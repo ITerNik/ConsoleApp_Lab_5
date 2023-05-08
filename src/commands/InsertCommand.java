@@ -1,23 +1,21 @@
 package commands;
 
-import elements.Person;
-import exceptions.BadParametersException;
-import exceptions.NonUniqueIdException;
 import logic.IODevice;
 import logic.Manager;
+import resources.Messages;
 
 
 public class InsertCommand extends AbstractCommand {
     public InsertCommand(IODevice io, Manager manager) {
         super(io, manager);
-        elements = new Person[1];
+        setElementNumber(1);
         setParameterNames("key");
     }
 
     @Override
     protected void checkArguments(String[] param) throws IllegalArgumentException {
         if (manager.containsKey(param[0]))
-            throw new IllegalArgumentException("Элемент с ключом " + param[0] + " уже существует");
+            throw new IllegalArgumentException(Messages.getMessage("warning.format.existing_element", param[0]));
     }
 
     @Override
@@ -32,11 +30,11 @@ public class InsertCommand extends AbstractCommand {
 
     @Override
     public String getReport() {
-        return "Элемент " + parameters[0] + " добавлен";
+        return Messages.getMessage("message.format.added", parameters[0]);
     }
 
     @Override
     public String getInfo() {
-        return "добавляет новый элемент с заданным ключом";
+        return Messages.getMessage("command.insert");
     }
 }

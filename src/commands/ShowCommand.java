@@ -2,6 +2,7 @@ package commands;
 
 import logic.IODevice;
 import logic.Manager;
+import resources.Messages;
 
 public class ShowCommand extends AbstractCommand {
     private String report;
@@ -26,6 +27,6 @@ public class ShowCommand extends AbstractCommand {
 
     @Override
     public String getInfo() {
-        return "выводит в стандартный поток вывода все элементы коллекции в строковом представлении";
+        return Messages.getMessage("command.show");
     }
 }

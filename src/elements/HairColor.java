@@ -1,15 +1,13 @@
 package elements;
 
+import resources.Messages;
+
 public enum HairColor {
-    ORANGE("РЫЖИЙ"),
-    WHITE("СЕДОЙ"),
-    BROWN("БРЮНЕТ");
+    ORANGE,
+    WHITE,
+    BROWN;
 
-    private String locale;
-
-    HairColor(String name) {
-        this.locale = name;
-    }
+    private final String locale = Messages.getMessage("color." + name().toLowerCase()).toUpperCase();
 
     public static HairColor getByValue(String value) {
         for (HairColor color : HairColor.values()) {

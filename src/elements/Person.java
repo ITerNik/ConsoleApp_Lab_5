@@ -2,6 +2,7 @@ package elements;
 
 import annotations.Builder;
 import exceptions.BadParametersException;
+import resources.Messages;
 
 import java.time.LocalDate;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -45,6 +46,13 @@ public class Person implements Comparable<Person> {
         return name;
     }
 
+    public Coordinates getCoordinates() {
+        return coordinates;
+    }
+
+    public double getHeight() {
+        return height;
+    }
 
     public EyeColor getEyeColor() {
         return eyeColor;
@@ -56,7 +64,7 @@ public class Person implements Comparable<Person> {
 
     public void setId(int id) {
         if (id < 0) {
-            throw new BadParametersException("ID не может быть отрицательным");
+            throw new BadParametersException(Messages.getMessage("warning.format.not_positive", Messages.getMessage("parameter.id")));
         }
         this.id = id;
     }
@@ -65,58 +73,62 @@ public class Person implements Comparable<Person> {
         this.creationDate = creationDate;
     }
 
-    @Builder(field = "Имя", order = 2)
+    @Builder(field = "parameter.name", order = 2)
     public void setName(String name) {
-        if (name == null || name.isBlank()) throw new BadParametersException("Человек должен иметь имя");
+        if (name == null || name.isBlank())
+            throw new BadParametersException(Messages.getMessage("warning.format.not_defined", Messages.getMessage("parameter.name")));
         this.name = name;
     }
 
     @Builder(order = 3)
     public void setCoordinates(Coordinates coordinates) {
-        if (coordinates == null) throw new BadParametersException("Координаты должны быть определены");
+        if (coordinates == null)
+            throw new BadParametersException(Messages.getMessage("warning.format.not_defined", Messages.getMessage("parameter.coordinates")));
         this.coordinates = coordinates;
     }
 
-    @Builder(field = "Вес", order = 6)
+    @Builder(field = "parameter.weight", order = 6)
     public void setWeight(String weight) {
         try {
             this.weight = weight.isBlank() ? 0 : Double.parseDouble(weight);
 
         } catch (NumberFormatException e) {
-            throw new BadParametersException("Вес должен быть вещественным числом");
+            throw new BadParametersException(Messages.getMessage("warning.format.not_real", Messages.getMessage("parameter.weight")));
         }
-        if (this.weight < 0) throw new BadParametersException("Вес не может быть отрицательным");
+        if (this.weight < 0)
+            throw new BadParametersException(Messages.getMessage("warning.format.not_positive", Messages.getMessage("parameter.weight")));
     }
 
-    @Builder(field = "Рост", order = 5)
+    @Builder(field = "parameter.height", order = 5)
     public void setHeight(String height) {
         try {
             this.height = height.isBlank() ? 0 : Double.parseDouble(height);
 
         } catch (NumberFormatException e) {
-            throw new BadParametersException("Рост должен быть вещественным числом");
+            throw new BadParametersException(Messages.getMessage("warning.format.not_real", Messages.getMessage("parameter.height")));
         }
-        if (this.height < 0) throw new BadParametersException("Рост не может быть отрицательным");
+        if (this.height < 0)
+            throw new BadParametersException(Messages.getMessage("warning.format.not_positive", Messages.getMessage("parameter.height")));
     }
 
-    @Builder(field = "Цвет глаз", variants = {"Зеленый", "Красный", "Карий", "Голубой", "Янтарь"}, order = 7)
+    @Builder(field = "parameter.eye_color", variants = {"color.green", "color.red", "color.black", "color.blue", "color.yellow"}, order = 7)
     public void setEyeColor(String value) {
         if (value == null || value.isBlank()) {
             this.eyeColor = null;
         } else {
             EyeColor converted = EyeColor.getByValue(value);
-            if (converted == null) throw new BadParametersException("Такого цвета не существует");
+            if (converted == null) throw new BadParametersException(Messages.getMessage("warning.no_color"));
             this.eyeColor = converted;
         }
     }
 
-    @Builder(field = "Цвет волос", variants = {"Рыжий", "Седой", "Брюнет"}, order = 8)
+    @Builder(field = "parameter.hair_color", variants = {"color.orange", "color.white", "color.brown"}, order = 8)
     public void setHairColor(String value) {
         if (value == null || value.isBlank()) {
             this.hairColor = null;
         } else {
             HairColor converted = HairColor.getByValue(value);
-            if (converted == null) throw new BadParametersException("Такого цвета не существует");
+            if (converted == null) throw new BadParametersException(Messages.getMessage("warning.no_color"));
             this.hairColor = converted;
         }
     }
@@ -146,8 +158,16 @@ public class Person implements Comparable<Person> {
 
     @Override
     public String toString() {
-        return String.format("ID: %s\nИмя: %s\nКоординаты: %s\nДата создания: %s\nРост: %s\nВес: %s\nЦвет глаз: %s\n" +
-                "Цвет волос: %s\nМестоположение: %s", id, name, coordinates, creationDate, height, weight, eyeColor, hairColor, location);
+        return String.format(Messages.getMessage("parameter.id") + ": %s\n" +
+                        Messages.getMessage("parameter.name") + ": %s\n" +
+                        Messages.getMessage("parameter.coordinates") + ": %s\n" +
+                        Messages.getMessage("parameter.creation_date") + ": %s\n" +
+                        Messages.getMessage("parameter.height") + ": %s\n" +
+                        Messages.getMessage("parameter.weight") + ": %s\n" +
+                        Messages.getMessage("parameter.eye_color") + ": %s\n" +
+                        Messages.getMessage("parameter.hair_color") + ": %s\n" +
+                        Messages.getMessage("parameter.location") + ": %s",
+                id, name, coordinates, creationDate, height, weight, eyeColor, hairColor, location);
     }
 }
 

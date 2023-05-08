@@ -2,6 +2,7 @@ package commands;
 
 import logic.IODevice;
 import logic.Manager;
+import resources.Messages;
 
 public class ClearCommand extends AbstractCommand {
     public ClearCommand(IODevice io, Manager manager) {
@@ -19,11 +20,11 @@ public class ClearCommand extends AbstractCommand {
 
     @Override
     public String getReport() {
-        return "Коллекция очищена";
+        return Messages.getMessage("message.cleared");
     }
 
     @Override
     public String getInfo() {
-        return "очищает коллекцию";
+        return Messages.getMessage("command.clear");
     }
 }

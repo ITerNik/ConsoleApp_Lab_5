@@ -2,37 +2,37 @@ package elements;
 
 import annotations.Builder;
 import exceptions.BadParametersException;
+import resources.Messages;
 
 public class Coordinates implements Comparable<Coordinates> {
     private Double x; //Поле не может быть null
     private Integer y; //Значение поля должно быть больше -663, Поле не может быть null
 
-    public Coordinates(double x, int y) {
-        this.x = x;
-        this.y = y;
-    }
 
     public Coordinates() {
     }
 
-    @Builder(field = "Координата X", order = 1)
+    @Builder(field = "parameter.coordinate_x", order = 1)
     public void setX(String x) {
         try {
-            if (x.isBlank()) throw new BadParametersException("Координата X должна быть определена");
+            if (x.isBlank())
+                throw new BadParametersException(Messages.getMessage("warning.format.not_defined", Messages.getMessage("parameter.coordinate_x")));
             this.x = Double.parseDouble(x);
         } catch (NumberFormatException e) {
-            throw new BadParametersException("Координата X должна быть вещественным числом");
+            throw new BadParametersException(Messages.getMessage("warning.format.not_real", Messages.getMessage("parameter.coordinate_x")));
         }
     }
 
-    @Builder(field = "Координата Y", order = 2)
+    @Builder(field = "parameter.coordinate_y", order = 2)
     public void setY(String y) {
         try {
-            if (y.isBlank()) throw new BadParametersException("Координата Y должна быть определена");
+            if (y.isBlank())
+                throw new BadParametersException(Messages.getMessage("warning.format.not_defined", Messages.getMessage("parameter.coordinate_y")));
             this.y = Integer.parseInt(y);
-            if (this.y < -633) throw new BadParametersException("Координата Y должна превышать -633");
+            if (this.y < -633)
+                throw new BadParametersException(Messages.getMessage("warning.format.not_big_enough", Messages.getMessage("parameter.coordinate_y"), -633));
         } catch (NumberFormatException e) {
-            throw new BadParametersException("Координата Y должна быть целым числом");
+            throw new BadParametersException(Messages.getMessage("warning.format.not_integer", Messages.getMessage("parameter.coordinate_y")));
         }
     }
 

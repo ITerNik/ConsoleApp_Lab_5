@@ -1,38 +1,39 @@
 package logic;
 
-import java.io.*;
-import java.util.*;
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import elements.Person;
-import exceptions.BadParametersException;
 import exceptions.StartingProblemException;
+import resources.Messages;
+
+import java.io.*;
+import java.util.Hashtable;
+import java.util.Scanner;
 
 public class JsonHandler implements Closeable {
-    private Scanner input;
-    private BufferedOutputStream output;
-    private File file;
+    private final Scanner input;
+    private final BufferedOutputStream output;
+    private final File file;
 
     public JsonHandler(String fileName) throws StartingProblemException {
         try {
             this.file = new File(fileName);
             input = new Scanner(new FileInputStream(file));
             output = new BufferedOutputStream(new FileOutputStream(file, true));
-        } catch (FileNotFoundException  e) {
-            throw new StartingProblemException("Файл не найден");
+        } catch (FileNotFoundException e) {
+            throw new StartingProblemException(Messages.getMessage("warning.format.file_not_found", fileName));
         }
     }
 
     private String readFileAsString() {
-        String res = "";
+        StringBuilder res = new StringBuilder();
         while (input.hasNextLine()) {
-            res += input.nextLine() + '\n';
+            res.append(input.nextLine()).append('\n');
         }
-        return res;
+        return res.toString();
     }
 
 
@@ -71,7 +72,7 @@ public class JsonHandler implements Closeable {
             output.close();
             input.close();
         } catch (IOException e) {
-            throw new RuntimeException("Не удается закрыть файл");
+            throw new RuntimeException(Messages.getMessage("warning.file_not_closed"));
         }
     }
 }

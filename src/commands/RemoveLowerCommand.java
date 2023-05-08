@@ -1,8 +1,8 @@
 package commands;
 
-import elements.Person;
 import logic.IODevice;
 import logic.Manager;
+import resources.Messages;
 
 import java.util.ArrayList;
 
@@ -26,14 +26,14 @@ public class RemoveLowerCommand extends AbstractCommand {
     @Override
     public String getReport() {
         if (removed.isEmpty()) {
-            return "Ничего не удалено";
+            return Messages.getMessage("message.nothing_deleted");
         } else {
-            return "Удалены следующие объекты:\n" + removed;
+            return Messages.getMessage("message.format.deleted", removed);
         }
     }
 
     @Override
     public String getInfo() {
-        return "удаляет из коллекции все элементы, меньшие, чем заданный";
+        return Messages.getMessage("command.remove_lower");
     }
 }

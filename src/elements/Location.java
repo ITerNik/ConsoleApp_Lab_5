@@ -2,6 +2,7 @@ package elements;
 
 import annotations.Builder;
 import exceptions.BadParametersException;
+import resources.Messages;
 
 public class Location implements Comparable<Location> {
     private long x;
@@ -11,37 +12,32 @@ public class Location implements Comparable<Location> {
     public Location() {
     }
 
-    public Location(long x, double y, float z) {
-        this.x = x;
-        this.y = y;
-        this.z = z;
-    }
-
-    @Builder(field = "Координата X локации", order = 1)
+    @Builder(field = "parameter.loc_x", order = 1)
     public void setX(String x) {
         try {
             this.x = x.isBlank() ? 0 : Long.parseLong(x);
         } catch (NumberFormatException e) {
-            throw new BadParametersException("Координата X должна быть целым числом");
+            throw new BadParametersException(Messages.getMessage("warning.format.not_integer", Messages.getMessage("parameter.loc_x")));
         }
     }
 
-    @Builder(field = "Координата Y локации", order = 2)
+    @Builder(field = "parameter.loc_y", order = 2)
     public void setY(String y) {
         try {
-            if (y.isBlank()) throw new BadParametersException("Координата Y должна быть определена");
+            if (y.isBlank())
+                throw new BadParametersException(Messages.getMessage("warning.format.not_defined", Messages.getMessage("parameter.loc_y")));
             this.y = Double.parseDouble(y);
         } catch (NumberFormatException e) {
-            throw new BadParametersException("Координата Y должна быть вещественным числом");
+            throw new BadParametersException(Messages.getMessage("warning.format.not_real", Messages.getMessage("parameter.loc_y")));
         }
     }
 
-    @Builder(field = "Координата Z локации", order = 3)
+    @Builder(field = "parameter.loc_z", order = 3)
     public void setZ(String z) {
         try {
             this.z = z.isBlank() ? 0 : Float.parseFloat(z);
         } catch (NumberFormatException e) {
-            throw new BadParametersException("Координата Z должна быть вещественным числом");
+            throw new BadParametersException(Messages.getMessage("warning.format.not_real", Messages.getMessage("parameter.loc_z")));
         }
     }
 

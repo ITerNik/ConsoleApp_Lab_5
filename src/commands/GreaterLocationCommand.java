@@ -1,9 +1,9 @@
 package commands;
 
 import elements.Location;
-import exceptions.BadParametersException;
 import logic.IODevice;
 import logic.Manager;
+import resources.Messages;
 
 public class GreaterLocationCommand extends AbstractCommand {
     private int count;
@@ -21,12 +21,12 @@ public class GreaterLocationCommand extends AbstractCommand {
 
     @Override
     public String getInfo() {
-        return "выводит количество элементов, значение поля location которых больше заданного";
+        return Messages.getMessage("command.greater_location");
     }
 
     @Override
     public String getReport() {
-        return "Элементов найдено: " + count;
+        return Messages.getMessage("message.format.count", count);
     }
 
     @Override

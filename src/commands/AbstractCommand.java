@@ -1,9 +1,10 @@
 package commands;
 
 import elements.Person;
-import exceptions.*;
+import exceptions.BadParametersException;
 import logic.IODevice;
 import logic.Manager;
+import resources.Messages;
 
 import java.time.LocalDate;
 
@@ -62,16 +63,17 @@ public abstract class AbstractCommand implements Command {
     @Override
     public Command parseArguments(String[] param) throws BadParametersException {
         if (parameters != null) {
-            if (param.length == 0) throw new BadParametersException("Команда не может принимать пустой аргумент");
+            if (param.length == 0) throw new BadParametersException(Messages.getMessage("warning.empty_argument"));
             checkArguments(param);
             for (int i = 0; i < Math.max(parameters.length, param.length); ++i) {
                 try {
                     parameters[i] = param[i];
                 } catch (ArrayIndexOutOfBoundsException e) {
-                    throw new BadParametersException("Команда принимает " + parameters.length + " аргумент(а)");
+                    throw new BadParametersException(Messages.getMessage("warning.format.number_of_arguments", parameters.length));
                 }
             }
-        } else if (param.length != 0) throw new BadParametersException("Команде не требуется аргумент");
+        } else if (param.length != 0)
+            throw new BadParametersException(Messages.getMessage("warning.needless_argument"));
 
         if (elements != null) {
             for (int i = 0; i < elements.length; ++i) {
@@ -89,22 +91,20 @@ public abstract class AbstractCommand implements Command {
 
     @Override
     public String getReport() {
-        return "Команда успешно выполнена";
+        return Messages.getMessage("message_success");
     }
 
     @Override
     public String argumentsInfo() {
-        String res = "";
+        StringBuilder res = new StringBuilder();
         if (parameters != null) {
             for (String param : parameters) {
-                res += " " + param;
+                res.append(" ").append(param);
             }
         }
         if (elements != null) {
-            for (int i = 0; i < elements.length; ++i) {
-                res += " {element}";
-            }
+            res.append(" {element}".repeat(elements.length));
         }
-        return res;
+        return res.toString();
     }
 }

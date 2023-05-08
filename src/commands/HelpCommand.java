@@ -1,20 +1,23 @@
 package commands;
 
 import logic.IODevice;
+import resources.Messages;
 
 import java.util.HashMap;
 
 public class HelpCommand extends AbstractCommand {
-    private HashMap<String, Command> commandList;
-    private String report = "";
+    private final HashMap<String, Command> commandList;
+    private final StringBuilder report = new StringBuilder();
+
     public HelpCommand(IODevice io, HashMap<String, Command> commandList) {
         this.commandList = commandList;
         this.io = io;
     }
+
     @Override
     public void execute() {
         for (Command command : commandList.values()) {
-            report += command.getName() + command.argumentsInfo() + " : " + command.getInfo() + "\n";
+            report.append(String.format("%s%s: %s\n", command.getName(), command.argumentsInfo(), command.getInfo()));
         }
     }
 
@@ -25,11 +28,11 @@ public class HelpCommand extends AbstractCommand {
 
     @Override
     public String getReport() {
-        return report;
+        return report.toString();
     }
 
     @Override
     public String getInfo() {
-        return "выводит справку по доступным командам";
+        return Messages.getMessage("command.help");
     }
 }

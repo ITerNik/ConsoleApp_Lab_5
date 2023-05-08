@@ -2,9 +2,9 @@ package commands;
 
 import elements.Location;
 import elements.Person;
-import exceptions.BadParametersException;
 import logic.IODevice;
 import logic.Manager;
+import resources.Messages;
 
 import java.util.ArrayList;
 
@@ -24,12 +24,12 @@ public class FilterByLocationCommand extends AbstractCommand{
 
     @Override
     public String getInfo() {
-        return "выводит элементы, значение поля location которых равно заданному";
+        return Messages.getMessage("command.filter_by_location");
     }
 
     @Override
     public String getReport() {
-        return "Найденные элементы:\n" + selected;
+        return Messages.getMessage("message.format.found", selected);
     }
 
     @Override

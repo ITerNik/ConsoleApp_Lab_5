@@ -1,16 +1,19 @@
 package logic;
 
 import commands.*;
-import exceptions.*;
+import exceptions.BadParametersException;
+import exceptions.NoSuchCommandException;
+import resources.Constants;
+import resources.Messages;
 
 import java.util.*;
 
 public class ConsoleService implements Service {
-    private Queue<Command> history = new LinkedList<>();
-    private Manager manager;
-    private CliDevice cio;
-    private JsonHandler handler;
-    private CommandBuilder builder;
+    private final Queue<Command> history = new ArrayDeque<>();
+    private final Manager manager;
+    private final CliDevice cio;
+    private final JsonHandler handler;
+    private final CommandBuilder builder;
 
     public ConsoleService(CliDevice commandIO, Manager manager, JsonHandler handler) {
         this.manager = manager;
@@ -20,7 +23,7 @@ public class ConsoleService implements Service {
     }
 
     public class CommandBuilder {
-        private HashMap<String, Command> commandList = new HashMap<>();
+        private final HashMap<String, Command> commandList = new HashMap<>();
         private ArrayList<String> fileHistory;
         private IODevice io;
 
@@ -61,11 +64,11 @@ public class ConsoleService implements Service {
         }
 
         public Command build(String line) throws BadParametersException {
-            String[] tokens = line.split("\\s+");
+            String[] tokens = line.split(Constants.SPLITTER);
             try {
                 return commandList.get(tokens[0]).parseArguments(Arrays.copyOfRange(tokens, 1, tokens.length));
             } catch (NullPointerException e) {
-                throw new NoSuchCommandException("Не существует команды " + tokens[0]);
+                throw new NoSuchCommandException(Messages.getMessage("warning.format.no_such_command", tokens[0]));
             }
         }
         public boolean addToFileHistory(String fileName) {
@@ -92,10 +95,10 @@ public class ConsoleService implements Service {
 
     @Override
     public void start() {
-        cio.write("Добро пожаловать!");
+        cio.write(Messages.getMessage("message.welcome"));
         while (true) {
             try {
-                cio.write("Пожалуйста, введите команду:");
+                cio.write(Messages.getMessage("input.command"));
                 String commandLine = cio.readLine();
                 Command current = builder.build(commandLine);
                 current.execute();
@@ -104,7 +107,7 @@ public class ConsoleService implements Service {
             } catch (NoSuchCommandException | BadParametersException | IllegalArgumentException e) {
                 cio.write(e.getMessage() + "\n");
             } catch (NoSuchElementException e) {
-                System.out.println("Заглядывайте еще!");
+                cio.write(Messages.getMessage("message.goodbye"));
                 break;
             }
         }

@@ -1,17 +1,15 @@
 package elements;
 
+import resources.Messages;
+
 public enum EyeColor {
-    GREEN("ЗЕЛЕНЫЙ"),
-    RED("КРАСНЫЙ"),
-    BLACK("КАРИЙ"),
-    BLUE("ГОЛУБОЙ"),
-    YELLOW("ЯНТАРЬ");
+    GREEN,
+    RED,
+    BLACK,
+    BLUE,
+    YELLOW;
 
-    private String locale;
-
-    EyeColor(String name) {
-        this.locale = name;
-    }
+    private final String locale = Messages.getMessage("color." + name().toLowerCase()).toUpperCase();
 
     public static EyeColor getByValue(String value) {
         for (EyeColor color : EyeColor.values()) {

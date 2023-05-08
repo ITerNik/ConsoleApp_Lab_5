@@ -1,10 +1,12 @@
 package logic;
 
 import annotations.Builder;
+import resources.Messages;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.*;
+import java.util.Scanner;
+import java.util.TreeSet;
 
 public class CliDevice extends IODevice {
 
@@ -40,16 +42,16 @@ public class CliDevice extends IODevice {
 
 
     private String getQuery(Builder annotation) {
-        String query = "Введите параметр " + annotation.field();
+        StringBuilder query = new StringBuilder(Messages.getMessage("input.format.parameter", Messages.getMessage(annotation.field())));
         if (annotation.variants().length != 0) {
-            query += " из списка:\n";
+            query.append(" ").append(Messages.getMessage("input.from_list")).append("\n");
             for (int i = 0; i < annotation.variants().length; ++i) {
-                query += String.format("%s. %s\n", i + 1, annotation.variants()[i]);
+                query.append(String.format("%s. %s\n", i + 1, Messages.getMessage(annotation.variants()[i])));
             }
         } else {
-            query += ":\n";
+            query.append(":\n");
         }
-        return query;
+        return query.toString();
     }
 
 }

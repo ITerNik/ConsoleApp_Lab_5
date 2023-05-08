@@ -1,7 +1,5 @@
 package logic;
 
-import annotations.Builder;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -11,7 +9,7 @@ import java.util.Scanner;
 import java.util.TreeSet;
 
 public class FileDevice extends IODevice {
-    private File file;
+    private final File file;
 
     public FileDevice(String fileName) throws FileNotFoundException {
         super(new Scanner(new FileInputStream(fileName)));

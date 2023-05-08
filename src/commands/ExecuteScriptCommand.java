@@ -1,24 +1,28 @@
 package commands;
 
 import exceptions.BadParametersException;
-import logic.*;
+import logic.ConsoleService;
+import logic.FileDevice;
+import logic.IODevice;
+import logic.Manager;
+import resources.Messages;
 
 import java.io.FileNotFoundException;
 
 public class ExecuteScriptCommand extends AbstractCommand {
 
-    private ConsoleService.CommandBuilder builder;
+    private final ConsoleService.CommandBuilder builder;
     private FileDevice fio;
 
     private String report = "";
 
     @Override
     protected void checkArguments(String[] param) throws BadParametersException {
-        if (!builder.addToFileHistory(param[0])) throw new BadParametersException("Исполнение файла зациклилось");
+        if (!builder.addToFileHistory(param[0])) throw new BadParametersException(Messages.getMessage("warning.cycle"));
         try {
             fio = new FileDevice(param[0]);
         } catch (FileNotFoundException e) {
-            throw new BadParametersException("Передан несуществующий файл");
+            throw new BadParametersException(Messages.getMessage("warning.format.file_not_found", param[0]));
         }
     }
 
@@ -52,6 +56,6 @@ public class ExecuteScriptCommand extends AbstractCommand {
 
     @Override
     public String getInfo() {
-        return "считывает и исполняет скрипт из указанного файла. В скрипте содержатся команды в таком же виде, в котором их вводит пользователь в интерактивном режиме";
+        return Messages.getMessage("command.execute_script");
     }
 }

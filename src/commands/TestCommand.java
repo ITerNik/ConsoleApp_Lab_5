@@ -1,14 +1,8 @@
 package commands;
 
-import elements.EyeColor;
-import elements.Person;
-import logic.FileDevice;
 import logic.IODevice;
 import logic.Manager;
-
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.time.LocalDate;
+import resources.Messages;
 
 
 public class TestCommand extends AbstractCommand {
@@ -28,6 +22,6 @@ public class TestCommand extends AbstractCommand {
 
     @Override
     public String getInfo() {
-        return "побочная команда для тестов";
+        return Messages.getMessage("command.test");
     }
 }

@@ -1,12 +1,13 @@
 package commands;
 
 import logic.IODevice;
+import resources.Messages;
 
 import java.util.Queue;
 
 public class HistoryCommand extends AbstractCommand {
-    private Queue<Command> commandHistory;
-    private String report = "";
+    private final Queue<Command> commandHistory;
+    private StringBuilder report = new StringBuilder();
 
     public HistoryCommand(IODevice io, Queue<Command> commandHistory) {
         this.commandHistory = commandHistory;
@@ -17,13 +18,13 @@ public class HistoryCommand extends AbstractCommand {
     public void execute() {
 
         if (commandHistory.isEmpty()) {
-            report = "Пока ни одной команды не исполнено";
-            return;
+            report = new StringBuilder(Messages.getMessage("message.no_completed"));
+        } else {
+            for (Command command : commandHistory) {
+                report.append("\n").append(command.getName());
+            }
+            report = new StringBuilder(Messages.getMessage("message.completed")).append(report.toString());
         }
-        for (Command command : commandHistory) {
-            report += "\n" + command.getName();
-        }
-        report = "Выполненные команды:" + report;
     }
 
     @Override
@@ -33,11 +34,11 @@ public class HistoryCommand extends AbstractCommand {
 
     @Override
     public String getReport() {
-        return report;
+        return report.toString();
     }
 
     @Override
     public String getInfo() {
-        return "выводит последние 8 команд (без их аргументов)";
+        return Messages.getMessage("command.history");
     }
 }
