@@ -1,5 +1,6 @@
 package commands;
 
+import elements.Person;
 import logic.IODevice;
 import logic.Manager;
 import resources.Messages;
@@ -8,7 +9,7 @@ import resources.Messages;
 public class InsertCommand extends AbstractCommand {
     public InsertCommand(IODevice io, Manager manager) {
         super(io, manager);
-        setElementNumber(1);
+        setElements(Person.class, 1);
         setParameterNames("key");
     }
 
@@ -20,7 +21,7 @@ public class InsertCommand extends AbstractCommand {
 
     @Override
     public void execute() {
-        manager.put(parameters[0], elements[0]);
+        manager.put(parameters[0], (Person) elements[0]);
     }
 
     @Override

@@ -17,20 +17,26 @@ public class FileDevice extends IODevice {
     }
 
     @Override
-    public <T> T readElement(T base) {
-        TreeSet<Method> methods = selectMethods(base.getClass().getMethods());
+    public <T> T readElement(Class<T> cl) {
+        T base = null;
+        try {
+            base = cl.getConstructor().newInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        TreeSet<Method> methods = selectMethods(cl.getMethods());
         for (Method method : methods) {
             Class<?> type = method.getParameterTypes()[0];
             try {
                 if (type != String.class) {
-                    method.invoke(base, readElement(type.getConstructor().newInstance()));
+                    method.invoke(base, readElement(type));
                 } else {
                     String field = input.nextLine();
                     method.invoke(base, field);
                 }
             } catch (InvocationTargetException e) {
-                System.out.printf("В файле %s: %s%n", file.getName(),e.getCause().getMessage());
-            } catch (IllegalAccessException | NoSuchMethodException | InstantiationException e) {
+                System.out.printf("В файле %s: %s%n", file.getName(), e.getCause().getMessage());
+            } catch (IllegalAccessException e) {
                 e.printStackTrace();
             }
         }

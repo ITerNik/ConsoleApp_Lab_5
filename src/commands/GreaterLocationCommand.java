@@ -10,13 +10,14 @@ public class GreaterLocationCommand extends AbstractCommand {
 
     public GreaterLocationCommand(IODevice io, Manager manager) {
         super(io, manager);
+        setElements(Location.class, 1);
     }
 
 
 
     @Override
     public void execute() {
-        count = manager.countGreaterThanLocation(io.readElement(new Location()));
+        count = manager.countGreaterThanLocation((Location) elements[0]);
     }
 
     @Override

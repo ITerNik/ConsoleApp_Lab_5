@@ -5,10 +5,8 @@ import exceptions.BadParametersException;
 import resources.Messages;
 
 import java.time.LocalDate;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class Person implements Comparable<Person> {
-    private static AtomicInteger idCounter = new AtomicInteger(0); //Поле не может быть null, Значение поля должно быть больше 0, Значение этого поля должно быть уникальным, Значение этого поля должно генерироваться автоматически
     private int id;
     private String name; //Поле не может быть null, Строка не может быть пустой
     private Coordinates coordinates; //Поле не может быть null
@@ -22,11 +20,6 @@ public class Person implements Comparable<Person> {
 
 
     public Person() {
-    }
-
-    public Person(LocalDate date) {
-        this.id = idCounter.getAndIncrement();
-        creationDate = date;
     }
 
 
@@ -138,10 +131,6 @@ public class Person implements Comparable<Person> {
         this.location = location;
     }
 
-    public void setCounterId(int id) {
-        this.id = id;
-        idCounter.set(id);
-    }
 
 
     @Override

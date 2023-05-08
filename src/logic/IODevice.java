@@ -4,7 +4,9 @@ import annotations.Builder;
 
 import java.io.Closeable;
 import java.lang.reflect.Method;
-import java.util.*;
+import java.util.Comparator;
+import java.util.Scanner;
+import java.util.TreeSet;
 
 public abstract class IODevice implements Closeable {
 
@@ -18,7 +20,7 @@ public abstract class IODevice implements Closeable {
         return input.nextLine();
     }
 
-    public abstract  <T> T readElement(T base);
+    public abstract <T> T readElement(Class<T> cl);
 
     protected TreeSet<Method> selectMethods(Method[] methods) {
         TreeSet<Method> ordered = new TreeSet<>(Comparator.comparingInt(m -> m.getAnnotation(Builder.class).order()));

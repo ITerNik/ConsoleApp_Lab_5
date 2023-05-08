@@ -13,13 +13,14 @@ public class FilterByLocationCommand extends AbstractCommand{
     private ArrayList<Person> selected;
     public FilterByLocationCommand(IODevice io, Manager manager) {
         super(io, manager);
+        setElements(Location.class, 1);
     }
 
 
 
     @Override
     public void execute() {
-        selected = manager.filterByLocation(io.readElement(new Location()));
+        selected = manager.filterByLocation((Location) elements[0]);
     }
 
     @Override

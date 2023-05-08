@@ -15,15 +15,21 @@ public class CliDevice extends IODevice {
     }
 
     @Override
-    public <T> T readElement(T base) {
-        TreeSet<Method> methods = selectMethods(base.getClass().getMethods());
+    public <T> T readElement(Class<T> cl) {
+        T base = null;
+        try {
+            base = cl.getConstructor().newInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        TreeSet<Method> methods = selectMethods(cl.getMethods());
         for (Method method : methods) {
             Builder annotation = method.getAnnotation(Builder.class);
             Class<?> type = method.getParameterTypes()[0];
             while (true) {
                 try {
                     if (type != String.class) {
-                        method.invoke(base, readElement(type.getConstructor().newInstance()));
+                        method.invoke(base, readElement(type));
                     } else {
                         System.out.printf(getQuery(annotation));
                         String field = input.nextLine();
@@ -32,7 +38,7 @@ public class CliDevice extends IODevice {
                     break;
                 } catch (InvocationTargetException e) {
                     System.out.println(e.getCause().getMessage());
-                } catch (IllegalAccessException | NoSuchMethodException | InstantiationException e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }

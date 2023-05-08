@@ -1,12 +1,9 @@
 package commands;
 
-import elements.Person;
 import exceptions.BadParametersException;
 import logic.IODevice;
 import logic.Manager;
 import resources.Messages;
-
-import java.time.LocalDate;
 
 /**
  * Абстрактный класс реализующий интерфейс Command и определяющий базовое поведение команд.
@@ -17,7 +14,8 @@ public abstract class AbstractCommand implements Command {
     protected Manager manager;
     protected IODevice io;
     protected String[] parameters;
-    protected Person[] elements;
+    protected Object[] elements;
+    protected Class type;
 
     public AbstractCommand() {
     }
@@ -56,8 +54,9 @@ public abstract class AbstractCommand implements Command {
      * @param number количество считываемых элементов коллекции
      * @see #argumentsInfo()
      */
-    protected void setElementNumber(int number) {
-        elements = new Person[number];
+    protected void setElements(Class type, int number) {
+        this.elements = new Object[number];
+        this.type = type;
     }
 
     @Override
@@ -77,7 +76,7 @@ public abstract class AbstractCommand implements Command {
 
         if (elements != null) {
             for (int i = 0; i < elements.length; ++i) {
-                elements[i] = io.readElement(new Person(LocalDate.now()));
+                elements[i] = io.readElement(type);
             }
         }
         return this;
@@ -103,7 +102,7 @@ public abstract class AbstractCommand implements Command {
             }
         }
         if (elements != null) {
-            res.append(" {element}".repeat(elements.length));
+            res.append(String.format(" {%s}", type.getSimpleName()).repeat(elements.length));
         }
         return res.toString();
     }

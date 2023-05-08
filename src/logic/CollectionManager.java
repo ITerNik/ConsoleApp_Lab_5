@@ -6,17 +6,21 @@ import exceptions.BadParametersException;
 import exceptions.NonUniqueIdException;
 import resources.Messages;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.TreeSet;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Predicate;
 
 public class CollectionManager implements Manager {
     private final Hashtable<String, Person> collection;
     private final DependentSet<Integer> uniqueSet = new DependentSet<>();
     private final LocalDateTime date;
+
+    AtomicInteger idCounter = new AtomicInteger(0);
 
     {
         date = LocalDateTime.now();
@@ -25,17 +29,13 @@ public class CollectionManager implements Manager {
     public CollectionManager(Hashtable<String, Person> collection) throws NonUniqueIdException {
         this.collection = collection;
         for (String key : collection.keySet()) {
-            uniqueSet.add(collection.get(key).getId());
+            if (!uniqueSet.add(collection.get(key).getId()))
+                throw new NonUniqueIdException(Messages.getMessage("warning.non_unique_id"));
         }
-        if (!uniqueSet.checkCondition()) throw new NonUniqueIdException(Messages.getMessage("warning.non_unique_id"));
     }
 
-    public class DependentSet<T> {
-        private TreeSet<T> unique = new TreeSet<>();
-
-        public boolean checkCondition() {
-            return unique.size() == collection.size();
-        }
+    public class DependentSet<T extends Comparable<T>> {
+        private final TreeSet<T> unique = new TreeSet<>();
 
         public boolean add(T value) {
             return unique.add(value);
@@ -65,11 +65,11 @@ public class CollectionManager implements Manager {
     }
 
     public void put(String key, Person person) {
-        int currId = person.getId();
-        while (!uniqueSet.add(currId)) {
-            currId++;
+        while (!uniqueSet.add(idCounter.get())) {
+            idCounter.incrementAndGet();
         }
-        person.setCounterId(currId);
+        person.setId(idCounter.get());
+        person.setCreationDate(LocalDate.now());
         collection.put(key, person);
     }
 

@@ -1,5 +1,6 @@
 package commands;
 
+import elements.Person;
 import logic.IODevice;
 import logic.Manager;
 import resources.Messages;
@@ -10,12 +11,12 @@ public class RemoveLowerCommand extends AbstractCommand {
     private ArrayList<String> removed;
     public RemoveLowerCommand(IODevice io, Manager manager) {
         super(io, manager);
-        setElementNumber(1);
+        setElements(Person.class, 1);
     }
 
     @Override
     public void execute() {
-        removed = manager.removeLower(elements[0]);
+        removed = manager.removeLower((Person) elements[0]);
     }
 
     @Override
